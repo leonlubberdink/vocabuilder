@@ -8,7 +8,7 @@ const app = express();
 // Parse incoming requests with JSON payloads (body-parser)
 app.use(express.json());
 
-app.use("api/v1/words", googleSheetsRouter);
+app.use("/api/v1/collection", googleSheetsRouter);
 
 // Create AppError wenn non existing route is used
 app.all("*", (req, res, next) => {
