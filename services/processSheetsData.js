@@ -57,18 +57,24 @@ const createList = (allValues) => {
   const scoreTwo = [];
   const scoreThree = [];
 
+  //return object already with index/row and sheetId
   const removedHeadings = allValues.map((tab) => tab.slice(2)).flat();
 
-  removedHeadings.forEach((word) => {
+  removedHeadings.forEach((word, i) => {
+    console.log(word[2]);
+    wordObj = { foreignLang: word[0], englishLang: word[1], row: i + 2 };
     if (word[2] === "1") {
-      word[2] = 1;
-      scoreOne.push(word);
+      console.log("Score 1");
+      wordObj.score = 1;
+      scoreOne.push(wordObj);
     } else if (word[2] === "2") {
-      word[2] = 2;
-      scoreTwo.push(word);
+      console.log("Score 2");
+      wordObj.score = 2;
+      scoreTwo.push(wordObj);
     } else if (word[2] === "3") {
-      word[2] = 3;
-      scoreThree.push(word);
+      console.log("Score 3");
+      wordObj.score = 3;
+      scoreThree.push(wordObj);
     }
   });
 

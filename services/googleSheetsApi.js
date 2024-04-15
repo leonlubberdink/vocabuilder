@@ -34,7 +34,7 @@ exports.getSpreadSheetValues = async ({ spreadsheetId, auth, sheetName }) => {
       auth,
       range: sheetName,
     });
-    console.log(res.data);
+    // console.log(res.data);
     return res.data.values;
   } catch (error) {
     throw error;
