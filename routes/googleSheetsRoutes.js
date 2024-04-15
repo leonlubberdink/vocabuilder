@@ -5,6 +5,8 @@ const googleSheetsController = require("../controllers/googleSheetsController");
 const router = express.Router();
 
 router.route("/getTabs").get(googleSheetsController.getTabs);
-router.route("/getAllWords").post(googleSheetsController.getAllWords);
+router
+  .route("/getWordsSelection")
+  .post(googleSheetsController.getWordsSelection);
 
 module.exports = router;

@@ -18,7 +18,7 @@ exports.getTabs = async (req, res) => {
   }
 };
 
-exports.getAllWords = async (req, res) => {
+exports.getWordsSelection = async (req, res) => {
   try {
     const words = await getWords(req.body);
 

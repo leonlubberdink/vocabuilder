@@ -49,13 +49,30 @@ const getAllValuesFromSpreadSheet = async ({
   const values = await Promise.all(valuesPromises);
   const valuesNotUndefined = values.filter((value) => value !== undefined);
 
-  console.log(valuesNotUndefined);
-
   return valuesNotUndefined;
 };
 
 const createList = (allValues) => {
-  return allValues;
+  const scoreOne = [];
+  const scoreTwo = [];
+  const scoreThree = [];
+
+  const removedHeadings = allValues.map((tab) => tab.slice(2)).flat();
+
+  removedHeadings.forEach((word) => {
+    if (word[2] === "1") {
+      word[2] = 1;
+      scoreOne.push(word);
+    } else if (word[2] === "2") {
+      word[2] = 2;
+      scoreTwo.push(word);
+    } else if (word[2] === "3") {
+      word[2] = 3;
+      scoreThree.push(word);
+    }
+  });
+
+  return { scoreOne, scoreTwo, scoreThree };
 };
 
 const processWords = async ({ tabIdsAndNames, auth, spreadsheetId }) => {
