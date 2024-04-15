@@ -4,26 +4,38 @@ const sheets = google.sheets("v4");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
 exports.getAuthToken = async () => {
-  const auth = new google.auth.GoogleAuth({
-    scopes: SCOPES,
-  });
-  const authToken = await auth.getClient();
-  return authToken;
+  try {
+    const auth = new google.auth.GoogleAuth({
+      scopes: SCOPES,
+    });
+    const authToken = await auth.getClient();
+    return authToken;
+  } catch (error) {
+    throw error;
+  }
 };
 
 exports.getSpreadSheet = async ({ spreadsheetId, auth }) => {
-  const res = await sheets.spreadsheets.get({
-    spreadsheetId,
-    auth,
-  });
-  return res;
+  try {
+    const res = await sheets.spreadsheets.get({
+      spreadsheetId,
+      auth,
+    });
+    return res;
+  } catch (error) {
+    throw error;
+  }
 };
 
-async function getSpreadSheetValues({ spreadsheetId, auth, sheetName }) {
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    auth,
-    range: sheetName,
-  });
-  return res;
-}
+exports.getSpreadSheetValues = async ({ spreadsheetId, auth, sheetName }) => {
+  try {
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      auth,
+      range: sheetName,
+    });
+    return res.data.values;
+  } catch (error) {
+    throw error;
+  }
+};

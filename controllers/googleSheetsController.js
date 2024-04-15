@@ -1,11 +1,8 @@
-const { getTabs } = require("../services/processSheetsData");
+const { getTabs, getWords } = require("../services/processSheetsData");
 
 exports.getTabs = async (req, res) => {
   try {
-    console.log("TABS");
     const tabs = await getTabs();
-
-    console.log(tabs);
 
     res.status(201).json({
       status: "success",
@@ -13,6 +10,28 @@ exports.getTabs = async (req, res) => {
       tabs,
     });
   } catch (error) {
-    console.log(error.message);
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
+      status: error.message ? "fail" : "error",
+      message: error.message || "Unknown error",
+    });
+  }
+};
+
+exports.getAllWords = async (req, res) => {
+  try {
+    const words = await getWords(req.body);
+
+    res.status(201).json({
+      status: "success",
+      results: words.length,
+      words,
+    });
+  } catch (error) {
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
+      status: error.message ? "fail" : "error",
+      message: error.message || "Unknown error",
+    });
   }
 };
