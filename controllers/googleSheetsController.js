@@ -1,4 +1,8 @@
-const { getTabs, getWords } = require("../services/processSheetsData");
+const {
+  getTabs,
+  getWords,
+  getRandomWord,
+} = require("../services/processSheetsData");
 
 exports.getTabs = async (req, res) => {
   try {
@@ -18,7 +22,7 @@ exports.getTabs = async (req, res) => {
   }
 };
 
-exports.getWordsSelection = async (req, res) => {
+exports.getAllWords = async (req, res) => {
   try {
     const words = await getWords(req.body);
 
@@ -26,6 +30,57 @@ exports.getWordsSelection = async (req, res) => {
       status: "success",
       results: words.length,
       words,
+    });
+  } catch (error) {
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
+      status: error.message ? "fail" : "error",
+      message: error.message || "Unknown error",
+    });
+  }
+};
+
+exports.getRandomWord = async (req, res) => {
+  try {
+    const word = await getRandomWord();
+
+    res.status(201).json({
+      status: "success",
+      word,
+    });
+  } catch (error) {
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
+      status: error.message ? "fail" : "error",
+      message: error.message || "Unknown error",
+    });
+  }
+};
+
+exports.getRandomWord = async (req, res) => {
+  try {
+    const word = await getRandomWord();
+
+    res.status(201).json({
+      status: "success",
+      word,
+    });
+  } catch (error) {
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
+      status: error.message ? "fail" : "error",
+      message: error.message || "Unknown error",
+    });
+  }
+};
+
+exports.checkAnswer = async (req, res) => {
+  try {
+    const res = await getRandomWord();
+
+    res.status(201).json({
+      status: "success",
+      word,
     });
   } catch (error) {
     const statusCode = error.status || 500;

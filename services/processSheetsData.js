@@ -18,7 +18,7 @@ const processTabs = (tabs) => {
   return idsAndNames;
 };
 
-exports.getTabs = async () => {
+const getTabs = async () => {
   const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
   const auth = await getAuthToken();
@@ -31,7 +31,7 @@ exports.getTabs = async () => {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-// WORDS
+// ALL WORDS
 const getAllValuesFromSpreadSheet = async ({
   tabIdsAndNames,
   auth,
@@ -43,7 +43,13 @@ const getAllValuesFromSpreadSheet = async ({
       auth,
       sheetName: tab.name,
     });
-    return res;
+
+    const resPlusTabs = res.map((arr) => {
+      arr.push(tab.name);
+      return arr;
+    });
+
+    return resPlusTabs;
   });
 
   const values = await Promise.all(valuesPromises);
@@ -61,18 +67,19 @@ const createList = (allValues) => {
   const removedHeadings = allValues.map((tab) => tab.slice(2)).flat();
 
   removedHeadings.forEach((word, i) => {
-    console.log(word[2]);
-    wordObj = { foreignLang: word[0], englishLang: word[1], row: i + 2 };
+    wordObj = {
+      foreignLang: word[0],
+      englishLang: word[1],
+      row: i + 2,
+      tabName: word[3],
+    };
     if (word[2] === "1") {
-      console.log("Score 1");
       wordObj.score = 1;
       scoreOne.push(wordObj);
     } else if (word[2] === "2") {
-      console.log("Score 2");
       wordObj.score = 2;
       scoreTwo.push(wordObj);
     } else if (word[2] === "3") {
-      console.log("Score 3");
       wordObj.score = 3;
       scoreThree.push(wordObj);
     }
@@ -93,7 +100,7 @@ const processWords = async ({ tabIdsAndNames, auth, spreadsheetId }) => {
   return wordList;
 };
 
-exports.getWords = async () => {
+const getWords = async () => {
   const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
   const auth = await getAuthToken();
@@ -106,3 +113,43 @@ exports.getWords = async () => {
 
   return words;
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// GET ONE RANDOM WORD
+
+const getScoreToPick = () => {
+  const randomNumber = Math.floor(Math.random() * 100) + 1;
+
+  if (randomNumber <= 15) {
+    return 1;
+  } else if (randomNumber <= 40) {
+    return 2;
+  } else {
+    return 3;
+  }
+};
+
+const getWord = async (score) => {
+  const allScoredWords = await getWords();
+
+  let scoredArray = [];
+
+  if (score === 1) scoredArray = allScoredWords.scoreOne;
+  if (score === 2) scoredArray = allScoredWords.scoreTwo;
+  if (score === 3) scoredArray = allScoredWords.scoreThree;
+
+  return scoredArray[Math.floor(Math.random() * scoredArray.length)];
+};
+
+const getRandomWord = async () => {
+  const score = getScoreToPick();
+
+  const word = await getWord(score);
+
+  return word;
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// ANSWER
+
+module.exports = { getWords, getTabs, getRandomWord };
